@@ -1,4 +1,4 @@
-FROM cloudsuite/java
+FROM cloudsuite/java 
 
 # Install dependencies
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
@@ -8,8 +8,8 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
       curl \
     && rm -rf /var/lib/apt/lists/*
 
-ENV SPARK_VERSION 1.5.1
-ENV HADOOP_VERSION 2.6
+ENV SPARK_VERSION 2.1.0
+ENV HADOOP_VERSION 2.7
 ENV MIRROR  https://d3kbcqa49mib13.cloudfront.net/
 ENV SPARK_HOME /opt/spark-${SPARK_VERSION}
 
@@ -17,7 +17,7 @@ ENV SPARK_HOME /opt/spark-${SPARK_VERSION}
 RUN set -x \
     && curl ${MIRROR}spark-${SPARK_VERSION}.tgz | tar -xzC /root \
     && cd /root/spark-${SPARK_VERSION} \
-    && ./make-distribution.sh -Phadoop-${HADOOP_VERSION} -Pyarn -Pnetlib-lgpl >/dev/null \
+    && ./dev/make-distribution.sh -Phadoop-${HADOOP_VERSION} -Pyarn -Pnetlib-lgpl >/dev/null \
     && mv dist /opt/spark-${SPARK_VERSION} \
     && cd /root && rm -r .zinc .m2 spark-${SPARK_VERSION} \
     && apt-get purge -y --auto-remove ${BUILD_DEPS}
